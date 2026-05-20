@@ -1,1 +1,11 @@
 @import "tailwindcss";
+
+@theme {
+  --color-tranquil: var(--tranquil);
+  --color-glaucous: var(--glaucous);
+}
+
+:root {
+  --tranquil: #373b53;
+  --glaucous: #7e88c3;
+}

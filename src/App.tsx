@@ -1,7 +1,8 @@
 import "./App.css";
+import Sidebar from "./components/Sidebar";
 
 function App() {
-  return <h1>Invoice Manager</h1>;
+  return <Sidebar />;
 }
 
 export default App;
