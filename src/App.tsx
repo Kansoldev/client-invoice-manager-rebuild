@@ -1,18 +1,18 @@
-import { useState } from "react";
+import { useRef } from "react";
 import { ChevronRight } from "lucide-react";
 import Sidebar from "./components/Sidebar";
 import Header from "./components/Header";
 import "./App.css";
 
 function App() {
-  const [showInvoice, setShowInvoice] = useState(true);
+  const showInvoice = useRef(true);
 
   return (
     <>
       <Sidebar />
       <Header />
 
-      {!showInvoice && (
+      {!showInvoice.current && (
         <section className="flex flex-col justify-center items-center mt-20">
           <img src="/Email campaign.svg" />
 
@@ -27,7 +27,7 @@ function App() {
         </section>
       )}
 
-      {showInvoice && (
+      {showInvoice.current && (
         <section className="mx-4 lg:mx-0">
           <div className="bg-white grid sm:flex lg:w-210 mx-auto items-center justify-between gap-2 rounded-md shadow mt-8 py-6 px-6">
             <p className="font-bold text-primary">
