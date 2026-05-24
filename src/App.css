@@ -12,6 +12,7 @@
   --color-primary: var(--primary);
   --color-secondary: var(--secondary);
   --color-lavender: var(--lavender);
+  --color-pizazz: var(--pizazz);
 }
 
 :root {
@@ -20,6 +21,7 @@
   --primary: #0c0e16;
   --lavender: #888eb0;
   --body-bg: #f8f8fb;
+  --pizazz: #ff8f00;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
