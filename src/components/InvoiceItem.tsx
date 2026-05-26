@@ -7,6 +7,7 @@ type InvoiceItemProps = {
   dueDate: string;
   clientName: string;
   amount: string;
+  darkMode: boolean;
   status: string;
 };
 
@@ -15,21 +16,22 @@ export default function InvoiceItem({
   dueDate,
   clientName,
   amount,
+  darkMode,
   status,
 }: InvoiceItemProps) {
-  let statusbg = "";
+  let statusbg;
 
   switch (status) {
     case "paid":
-      statusbg = "bg-emerald-50 text-emerald-400 before:bg-emerald-400";
+      statusbg = `${darkMode ? "bg-emerald-50/5" : "bg-emerald-50"} before:bg-emerald-400 text-emerald-400`;
       break;
 
     case "pending":
-      statusbg = "bg-pizazz/12 text-pizazz before:bg-pizazz";
+      statusbg = `${darkMode ? "bg-pizazz/5" : "bg-pizazz/12"} before:bg-pizazz text-pizazz`;
       break;
 
     case "draft":
-      statusbg = "bg-tranquil/12 text-tranquil before:bg-tranquil";
+      statusbg = `${darkMode ? "bg-tranquil/50 before:bg-ana text-ana" : "bg-tranquil/12 before:bg-tranquil text-tranquil"}`;
       break;
 
     default:
@@ -38,7 +40,7 @@ export default function InvoiceItem({
 
   return (
     <section className="mx-4 lg:mx-0">
-      <div className="bg-white grid sm:flex lg:w-210 mx-auto items-center justify-between gap-2 rounded-md shadow mt-8 py-6 px-6">
+      <div className="bg-outer-space grid sm:flex lg:w-210 mx-auto items-center justify-between gap-2 rounded-md shadow mt-8 py-6 px-6">
         <p className="font-bold text-primary">
           <span className="text-lavender sm:order-1">#</span>
           {invoiceId}

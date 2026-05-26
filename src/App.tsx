@@ -1,15 +1,35 @@
-import { useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import Sidebar from "./components/Sidebar";
 import Header from "./components/Header";
 import InvoiceItem from "./components/InvoiceItem";
 import "./App.css";
 
 function App() {
+  const [darkMode, setDarkMode] = useState(() => {
+    const darkModeVal = window.localStorage.getItem("darkMode");
+
+    if (darkModeVal) return JSON.parse(darkModeVal);
+
+    return false;
+  });
+
   const showInvoice = useRef(true);
+
+  useEffect(() => {
+    const root = document.documentElement;
+
+    if (darkMode) {
+      root.setAttribute("data-theme", "dark");
+    } else {
+      root.removeAttribute("data-theme");
+    }
+
+    window.localStorage.setItem("darkMode", JSON.stringify(darkMode));
+  }, [darkMode]);
 
   return (
     <>
-      <Sidebar />
+      <Sidebar darkMode={darkMode} onChangeTheme={setDarkMode} />
       <Header />
 
       {!showInvoice.current && (
@@ -30,6 +50,7 @@ function App() {
       {showInvoice.current && (
         <>
           <InvoiceItem
+            darkMode={darkMode}
             invoiceId="XM9141"
             dueDate="19 Aug 2021"
             clientName="Jensen Huang"
@@ -38,6 +59,7 @@ function App() {
           />
 
           <InvoiceItem
+            darkMode={darkMode}
             invoiceId="RT3080"
             dueDate="20 Sep 2021"
             clientName="Alex Grim"
@@ -46,6 +68,7 @@ function App() {
           />
 
           <InvoiceItem
+            darkMode={darkMode}
             invoiceId="FV2353"
             dueDate="12 Nov 2021"
             clientName="Anita Wainwright"
