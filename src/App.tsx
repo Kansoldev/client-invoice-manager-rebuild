@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import Sidebar from "./components/Sidebar";
 import Header from "./components/Header";
 import InvoiceItem from "./components/InvoiceItem";
+import AddInvoice from "./components/AddInvoice";
 import "./App.css";
 
 function App() {
@@ -12,7 +13,7 @@ function App() {
 
     return false;
   });
-
+  const [showAddInvoice, setShowAddInvoice] = useState(false);
   const showInvoice = useRef(true);
 
   useEffect(() => {
@@ -30,7 +31,9 @@ function App() {
   return (
     <>
       <Sidebar darkMode={darkMode} onChangeTheme={setDarkMode} />
-      <Header />
+      <Header
+        onToggleAddInvoiceModal={() => setShowAddInvoice(!showAddInvoice)}
+      />
 
       {!showInvoice.current && (
         <section className="flex flex-col justify-center items-center mt-20">
@@ -76,6 +79,12 @@ function App() {
             status="draft"
           />
         </>
+      )}
+
+      {showAddInvoice && (
+        <AddInvoice
+          onShowAddInvoice={() => setShowAddInvoice(!showAddInvoice)}
+        />
       )}
     </>
   );

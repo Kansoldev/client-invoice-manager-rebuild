@@ -10,7 +10,11 @@ import {
 } from "@/components/ui/select";
 import useMediaQuery from "@/hooks/useMediaQuery";
 
-const Header = () => {
+const Header = ({
+  onToggleAddInvoiceModal,
+}: {
+  onToggleAddInvoiceModal: () => void;
+}) => {
   const isPhone = useMediaQuery("(max-width: 640px)");
 
   return (
@@ -52,6 +56,7 @@ const Header = () => {
           variant="secondary"
           size="lg"
           className="text-base rounded-full"
+          onClick={onToggleAddInvoiceModal}
         >
           <PlusCircle className="mr-2 fill-white text-secondary" />{" "}
           <span>

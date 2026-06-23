@@ -10,6 +10,8 @@
   --color-sidebar: var(--tranquil);
   --color-paragraph: var(--lavender);
   --color-invoice: #fff;
+  --color-form: #fff;
+  --color-label: var(--glaucous);
 
   --color-tranquil: var(--tranquil);
   --color-glaucous: var(--glaucous);
@@ -77,6 +79,8 @@
   --color-sidebar: var(--outer-space);
   --color-paragraph: var(--ana);
   --color-invoice: var(--outer-space);
+  --color-form: var(--cool-black);
+  --color-label: var(--ana);
 
   body {
     background-color: var(--cool-black);
