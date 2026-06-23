@@ -20,7 +20,7 @@ const Header = () => {
           Invoices
         </h1>
 
-        <p className="text-lavender text-sm lg:text-base">No invoices</p>
+        <p className="text-paragraph text-sm lg:text-base">No invoices</p>
       </div>
 
       <div className="flex items-center lg:gap-15">
@@ -31,7 +31,7 @@ const Header = () => {
             />
           </SelectTrigger>
 
-          <SelectContent>
+          <SelectContent className="bg-white">
             <SelectGroup className="border-0 font-bold space-y-2 p-5 hover:bg-transparent">
               <SelectItem value="draft" className="cursor-pointer">
                 Draft

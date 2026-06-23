@@ -3,10 +3,14 @@
 @import "shadcn/tailwind.css";
 
 @theme {
+  --color-primary: var(--black-pepper);
+  --color-secondary: var(--lady-blue);
+  --color-sidebar: var(--tranquil);
+  --color-paragraph: var(--lavender);
+  --color-invoice: #fff;
+
   --color-tranquil: var(--tranquil);
   --color-glaucous: var(--glaucous);
-  --color-primary: var(--primary);
-  --color-secondary: var(--secondary);
   --color-lavender: var(--lavender);
   --color-pizazz: var(--pizazz);
   --color-outer-space: var(--outer-space);
@@ -14,15 +18,15 @@
 }
 
 :root {
-  --tranquil: #373b53;
+  /* Arbitrary values */
+  --black-pepper: #0c0e16;
+  --lady-blue: #7c5dfa;
+  --cool-black: #141625;
   --glaucous: #7e88c3;
-  --primary: #0c0e16;
   --lavender: #888eb0;
-  --body-bg: #f8f8fb;
+  --tranquil: #373b53;
   --pizazz: #ff8f00;
-  --outer-space: #ffffff;
-  --secondary: #7c5dfa;
-  --secondary-foreground: oklch(0.205 0 0);
+  --outer-space: #1e2139;
   --ana: #dfe3fa;
 }
 
@@ -36,7 +40,6 @@
   --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
   --color-sidebar-primary: var(--sidebar-primary);
   --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar: var(--sidebar);
   --color-chart-5: var(--chart-5);
   --color-chart-4: var(--chart-4);
   --color-chart-3: var(--chart-3);
@@ -51,9 +54,7 @@
   --color-muted-foreground: var(--muted-foreground);
   --color-muted: var(--muted);
   --color-secondary-foreground: var(--secondary-foreground);
-  --color-secondary: var(--secondary);
   --color-primary-foreground: var(--primary-foreground);
-  --color-primary: var(--primary);
   --color-popover-foreground: var(--popover-foreground);
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
@@ -70,10 +71,14 @@
 }
 
 [data-theme="dark"] {
-  --body-bg: #141625;
-  --primary: #ffffff;
-  --outer-space: #1e2139;
-  --lavender: #ffffff;
+  --color-primary: #fff;
+  --color-sidebar: var(--outer-space);
+  --color-paragraph: var(--ana);
+  --color-invoice: var(--outer-space);
+
+  body {
+    background-color: var(--cool-black);
+  }
 }
 
 @layer base {

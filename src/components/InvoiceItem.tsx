@@ -40,7 +40,7 @@ export default function InvoiceItem({
 
   return (
     <section className="mx-4 lg:mx-0">
-      <div className="bg-outer-space grid sm:flex lg:w-210 mx-auto items-center justify-between gap-2 rounded-md shadow mt-8 py-6 px-6">
+      <div className="bg-invoice grid sm:flex lg:w-210 mx-auto items-center justify-between gap-2 rounded-md shadow mt-8 py-6 px-6">
         <p className="font-bold text-primary">
           <span className="text-lavender sm:order-1">#</span>
           {invoiceId}
@@ -65,7 +65,7 @@ export default function InvoiceItem({
 
         <ChevronRight
           size={18}
-          className="text-secondary hidden sm:block order-4"
+          className="text-secondary hidden sm:block order-4 cursor-pointer"
         />
       </div>
     </section>
