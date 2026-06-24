@@ -1,5 +1,5 @@
 import { useState, type ChangeEvent, type SubmitEvent } from "react";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, Plus } from "lucide-react";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import {
@@ -12,6 +12,14 @@ import {
 } from "@/components/ui/select";
 import { Button } from "./ui/button";
 import { generateRandomString } from "@/utils";
+
+type invoiceItemsProps = {
+  id: number;
+  itemName: string;
+  itemPrice: string;
+  itemQuantity: string;
+  total: number;
+};
 
 type invoiceFormProps = {
   invoiceId: string;
@@ -29,6 +37,7 @@ type invoiceFormProps = {
   paymentTerms: string;
   projectDescription: string;
   status: string;
+  invoiceItems: invoiceItemsProps[];
 };
 
 function AddInvoice({ onShowAddInvoice }: { onShowAddInvoice: () => void }) {
@@ -48,6 +57,7 @@ function AddInvoice({ onShowAddInvoice }: { onShowAddInvoice: () => void }) {
     paymentTerms: "",
     projectDescription: "",
     status: "pending",
+    invoiceItems: [],
   });
 
   function handleChange(e: ChangeEvent<HTMLInputElement>) {
@@ -55,6 +65,49 @@ function AddInvoice({ onShowAddInvoice }: { onShowAddInvoice: () => void }) {
       ...prevInvoiceData,
       [e.target.name]: e.target.value,
     }));
+  }
+
+  function handleAddItem() {
+    const newItem = {
+      id: Math.floor(Math.random() * 15),
+      itemName: "",
+      itemPrice: "",
+      itemQuantity: "",
+      total: 0,
+    };
+
+    setInvoiceFormData((prevInvoiceData) => ({
+      ...prevInvoiceData,
+      invoiceItems: [...prevInvoiceData.invoiceItems, newItem],
+    }));
+  }
+
+  function handleUpdateInvoiceItem(
+    e: ChangeEvent<HTMLInputElement>,
+    id: number,
+  ) {
+    setInvoiceFormData((prevInvoiceData) => {
+      return {
+        ...prevInvoiceData,
+        invoiceItems: prevInvoiceData.invoiceItems.map((invoiceItem) => {
+          if (invoiceItem.id === id) {
+            const updatedItem = {
+              ...invoiceItem,
+              [e.target.name]: e.target.value,
+            };
+
+            return {
+              ...updatedItem,
+              total:
+                Number(updatedItem.itemQuantity) *
+                Number(updatedItem.itemPrice),
+            };
+          }
+
+          return invoiceItem;
+        }),
+      };
+    });
   }
 
   function handleSubmit(e: SubmitEvent<HTMLFormElement>) {
@@ -293,6 +346,84 @@ function AddInvoice({ onShowAddInvoice }: { onShowAddInvoice: () => void }) {
               onChange={handleChange}
             />
           </Field>
+
+          <h3 className="mt-10 mb-4 text-blue-gray text-lg font-bold">
+            Item List
+          </h3>
+
+          <div>
+            <table>
+              <thead>
+                <tr className="grid grid-cols-5 w-full">
+                  <th className="text-left table-heading">Item Name</th>
+                  <th className="table-heading">Qty.</th>
+                  <th className="table-heading">Price</th>
+                  <th className="table-heading">Total</th>
+                </tr>
+              </thead>
+
+              <tbody className="flex flex-col mt-2">
+                {invoiceFormData.invoiceItems.length > 0 &&
+                  invoiceFormData.invoiceItems.map(
+                    (invoiceItem: invoiceItemsProps) => {
+                      return (
+                        <tr
+                          key={invoiceItem.id}
+                          className="grid grid-cols-5 justify-between gap-4 mb-2"
+                        >
+                          <td>
+                            <Input
+                              name="itemName"
+                              onChange={(e) =>
+                                handleUpdateInvoiceItem(e, invoiceItem.id)
+                              }
+                            />
+                          </td>
+
+                          <td>
+                            <Input
+                              name="itemQuantity"
+                              onChange={(e) =>
+                                handleUpdateInvoiceItem(e, invoiceItem.id)
+                              }
+                            />
+                          </td>
+
+                          <td>
+                            <Input
+                              type="text"
+                              name="itemPrice"
+                              onChange={(e) =>
+                                handleUpdateInvoiceItem(e, invoiceItem.id)
+                              }
+                            />
+                          </td>
+
+                          <td className="flex items-center justify-center">
+                            <span
+                              className={`${invoiceItem.total == 0 ? "hidden" : "inline-block text-primary"}`}
+                            >
+                              £{invoiceItem.total}
+                            </span>
+                          </td>
+
+                          <td></td>
+                        </tr>
+                      );
+                    },
+                  )}
+              </tbody>
+            </table>
+
+            <Button
+              type="button"
+              size="lg"
+              className="bg-strong-white text-glaucous dark:bg-comet dark:text-white w-full mt-10"
+              onClick={handleAddItem}
+            >
+              <Plus className="relative top-[-1.3px]" /> Add New Item
+            </Button>
+          </div>
 
           <div className="flex flex-col min-[400px]:flex-row items-center justify-between mt-10 pb-2">
             <Button
