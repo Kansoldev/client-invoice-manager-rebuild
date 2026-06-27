@@ -1,5 +1,5 @@
 import { useState, type ChangeEvent, type SubmitEvent } from "react";
-import { ChevronLeft, Plus } from "lucide-react";
+import { ChevronLeft, Plus, Trash } from "lucide-react";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import {
@@ -10,11 +10,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { v4 as uuidv4 } from "uuid";
 import { Button } from "./ui/button";
 import { generateRandomString } from "@/utils";
 
 type invoiceItemsProps = {
-  id: number;
+  id: string;
   itemName: string;
   itemPrice: string;
   itemQuantity: string;
@@ -69,7 +70,7 @@ function AddInvoice({ onShowAddInvoice }: { onShowAddInvoice: () => void }) {
 
   function handleAddItem() {
     const newItem = {
-      id: Math.floor(Math.random() * 15),
+      id: uuidv4(),
       itemName: "",
       itemPrice: "",
       itemQuantity: "",
@@ -84,7 +85,7 @@ function AddInvoice({ onShowAddInvoice }: { onShowAddInvoice: () => void }) {
 
   function handleUpdateInvoiceItem(
     e: ChangeEvent<HTMLInputElement>,
-    id: number,
+    id: string,
   ) {
     setInvoiceFormData((prevInvoiceData) => {
       return {
@@ -106,6 +107,17 @@ function AddInvoice({ onShowAddInvoice }: { onShowAddInvoice: () => void }) {
 
           return invoiceItem;
         }),
+      };
+    });
+  }
+
+  function handleRemoveInvoiceItem(itemID: string) {
+    setInvoiceFormData((prevInvoiceData) => {
+      return {
+        ...prevInvoiceData,
+        invoiceItems: prevInvoiceData.invoiceItems.filter(
+          (invoiceItem) => invoiceItem.id !== itemID,
+        ),
       };
     });
   }
@@ -407,7 +419,15 @@ function AddInvoice({ onShowAddInvoice }: { onShowAddInvoice: () => void }) {
                             </span>
                           </td>
 
-                          <td></td>
+                          <td>
+                            <Trash
+                              className="ml-2 mt-4 fill-lavender text-lavender hover:fill-red-aura hover:text-red-aura cursor-pointer"
+                              size={20}
+                              onClick={() =>
+                                handleRemoveInvoiceItem(invoiceItem.id)
+                              }
+                            />
+                          </td>
                         </tr>
                       );
                     },
