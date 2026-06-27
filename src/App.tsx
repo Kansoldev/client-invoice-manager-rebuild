@@ -1,4 +1,5 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
+import type { invoiceFormProps } from "./types";
 import Sidebar from "./components/Sidebar";
 import Header from "./components/Header";
 import InvoiceItem from "./components/InvoiceItem";
@@ -13,8 +14,12 @@ function App() {
 
     return false;
   });
+  const [invoices, setInvoices] = useState<invoiceFormProps[]>(() => {
+    const invoices = window.localStorage.getItem("invoices");
+    if (invoices) return JSON.parse(invoices);
+    return [];
+  });
   const [showAddInvoice, setShowAddInvoice] = useState(false);
-  const showInvoice = useRef(true);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -28,6 +33,14 @@ function App() {
     window.localStorage.setItem("darkMode", JSON.stringify(darkMode));
   }, [darkMode]);
 
+  useEffect(() => {
+    window.localStorage.setItem("invoices", JSON.stringify(invoices));
+  }, [invoices]);
+
+  function handleAddInvoice(data: invoiceFormProps) {
+    setInvoices((prevInvoices) => [...prevInvoices, data]);
+  }
+
   return (
     <>
       <Sidebar darkMode={darkMode} onChangeTheme={setDarkMode} />
@@ -35,7 +48,7 @@ function App() {
         onToggleAddInvoiceModal={() => setShowAddInvoice(!showAddInvoice)}
       />
 
-      {!showInvoice.current && (
+      {invoices.length === 0 && (
         <section className="flex flex-col justify-center items-center mt-20">
           <img src="/Email campaign.svg" />
 
@@ -50,39 +63,13 @@ function App() {
         </section>
       )}
 
-      {showInvoice.current && (
-        <>
-          <InvoiceItem
-            darkMode={darkMode}
-            invoiceId="XM9141"
-            dueDate="19 Aug 2021"
-            clientName="Jensen Huang"
-            amount="1,800.00"
-            status="paid"
-          />
-
-          <InvoiceItem
-            darkMode={darkMode}
-            invoiceId="RT3080"
-            dueDate="20 Sep 2021"
-            clientName="Alex Grim"
-            amount="556.00"
-            status="pending"
-          />
-
-          <InvoiceItem
-            darkMode={darkMode}
-            invoiceId="FV2353"
-            dueDate="12 Nov 2021"
-            clientName="Anita Wainwright"
-            amount="3,102.04"
-            status="draft"
-          />
-        </>
+      {invoices.length > 0 && (
+        <InvoiceItem invoices={invoices} darkMode={darkMode} />
       )}
 
       {showAddInvoice && (
         <AddInvoice
+          onAddInvoice={handleAddInvoice}
           onShowAddInvoice={() => setShowAddInvoice(!showAddInvoice)}
         />
       )}

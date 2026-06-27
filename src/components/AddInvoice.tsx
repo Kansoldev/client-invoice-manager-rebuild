@@ -1,6 +1,7 @@
 import { useState, type ChangeEvent, type SubmitEvent } from "react";
 import { cn } from "@/lib/utils";
 import { ChevronLeft, Plus, Trash } from "lucide-react";
+import { v4 as uuidv4 } from "uuid";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import {
@@ -11,36 +12,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { v4 as uuidv4 } from "uuid";
-import { Button } from "./ui/button";
+import type { invoiceFormProps, invoiceItemsProps } from "@/types";
+import { Button } from "@/components/ui/button";
 import { generateRandomString } from "@/utils";
-
-type invoiceItemsProps = {
-  id: string;
-  itemName: string;
-  itemPrice: string;
-  itemQuantity: string;
-  total: number;
-};
-
-type invoiceFormProps = {
-  invoiceId: string;
-  fromAddress: string;
-  fromCity: string;
-  fromPostCode: string;
-  fromCountry: string;
-  clientName: string;
-  clientAddress: string;
-  clientEmail: string;
-  clientCity: string;
-  clientPostCode: string;
-  clientCountry: string;
-  invoiceDueDate: string;
-  paymentTerms: string;
-  projectDescription: string;
-  status: string;
-  invoiceItems: invoiceItemsProps[];
-};
 
 const REQUIRED_FIELDS = [
   "fromAddress",
@@ -57,7 +31,13 @@ const REQUIRED_FIELDS = [
   "invoiceDueDate",
 ] as const;
 
-function AddInvoice({ onShowAddInvoice }: { onShowAddInvoice: () => void }) {
+function AddInvoice({
+  onAddInvoice,
+  onShowAddInvoice,
+}: {
+  onAddInvoice: (val: invoiceFormProps) => void;
+  onShowAddInvoice: () => void;
+}) {
   const [invoiceFormData, setInvoiceFormData] = useState<invoiceFormProps>({
     invoiceId: generateRandomString(),
     fromAddress: "",
@@ -172,6 +152,27 @@ function AddInvoice({ onShowAddInvoice }: { onShowAddInvoice: () => void }) {
   function handleSubmit(e: SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!handleValidation()) return;
+
+    onAddInvoice(invoiceFormData);
+
+    setInvoiceFormData({
+      invoiceId: generateRandomString(),
+      fromAddress: "",
+      fromCity: "",
+      fromPostCode: "",
+      fromCountry: "",
+      clientName: "",
+      clientEmail: "",
+      clientAddress: "",
+      clientCity: "",
+      clientPostCode: "",
+      clientCountry: "",
+      invoiceDueDate: "",
+      paymentTerms: "",
+      projectDescription: "",
+      status: "pending",
+      invoiceItems: [],
+    });
   }
 
   function EmptyFieldMsg() {
