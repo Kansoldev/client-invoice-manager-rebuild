@@ -19,6 +19,7 @@
   --color-pizazz: var(--pizazz);
   --color-outer-space: var(--outer-space);
   --color-ana: var(--ana);
+  --color-red-aura: var(--red-aura);
 }
 
 :root {
@@ -32,6 +33,7 @@
   --pizazz: #ff8f00;
   --outer-space: #1e2139;
   --ana: #dfe3fa;
+  --red-aura: #ec5757;
 }
 
 @theme inline {
@@ -102,4 +104,8 @@
   html {
     @apply font-sans;
   }
+}
+
+.label-error {
+  @apply text-red-aura font-medium;
 }

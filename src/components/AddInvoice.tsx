@@ -1,4 +1,5 @@
 import { useState, type ChangeEvent, type SubmitEvent } from "react";
+import { cn } from "@/lib/utils";
 import { ChevronLeft, Plus, Trash } from "lucide-react";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
@@ -41,6 +42,21 @@ type invoiceFormProps = {
   invoiceItems: invoiceItemsProps[];
 };
 
+const REQUIRED_FIELDS = [
+  "fromAddress",
+  "fromCity",
+  "fromPostCode",
+  "fromCountry",
+  "clientName",
+  "clientEmail",
+  "clientAddress",
+  "clientCity",
+  "clientPostCode",
+  "clientCountry",
+  "projectDescription",
+  "invoiceDueDate",
+] as const;
+
 function AddInvoice({ onShowAddInvoice }: { onShowAddInvoice: () => void }) {
   const [invoiceFormData, setInvoiceFormData] = useState<invoiceFormProps>({
     invoiceId: generateRandomString(),
@@ -59,6 +75,21 @@ function AddInvoice({ onShowAddInvoice }: { onShowAddInvoice: () => void }) {
     projectDescription: "",
     status: "pending",
     invoiceItems: [],
+  });
+
+  const [formErrors, setFormErrors] = useState({
+    fromAddress: false,
+    fromCity: false,
+    fromPostCode: false,
+    fromCountry: false,
+    clientName: false,
+    clientEmail: false,
+    clientAddress: false,
+    clientCity: false,
+    clientPostCode: false,
+    clientCountry: false,
+    invoiceDueDate: false,
+    projectDescription: false,
   });
 
   function handleChange(e: ChangeEvent<HTMLInputElement>) {
@@ -122,8 +153,33 @@ function AddInvoice({ onShowAddInvoice }: { onShowAddInvoice: () => void }) {
     });
   }
 
+  function handleValidation() {
+    let isValid = false;
+
+    const newErrors = Object.fromEntries(
+      REQUIRED_FIELDS.map((field) => [field, invoiceFormData[field] === ""]),
+    );
+
+    if (!Object.values(newErrors).includes(true)) {
+      isValid = true;
+    }
+
+    setFormErrors((prevFormErrors) => ({ ...prevFormErrors, ...newErrors }));
+
+    return isValid;
+  }
+
   function handleSubmit(e: SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (!handleValidation()) return;
+  }
+
+  function EmptyFieldMsg() {
+    return (
+      <span className="absolute right-0 left-0 text-right text-xs top-[1.3px] text-red-aura font-semibold">
+        can't be empty
+      </span>
+    );
   }
 
   return (
@@ -151,7 +207,13 @@ function AddInvoice({ onShowAddInvoice }: { onShowAddInvoice: () => void }) {
           <h3 className="capitalize text-secondary font-bold">bill from</h3>
 
           <Field className="relative mt-4 md:col-span-3">
-            <FieldLabel htmlFor="address1" className="text-label font-normal">
+            <FieldLabel
+              htmlFor="address1"
+              className={cn(
+                "text-label font-normal",
+                formErrors.fromAddress ? "label-error" : "",
+              )}
+            >
               Street Address
             </FieldLabel>
 
@@ -160,12 +222,21 @@ function AddInvoice({ onShowAddInvoice }: { onShowAddInvoice: () => void }) {
               value={invoiceFormData.fromAddress}
               name="fromAddress"
               onChange={handleChange}
+              aria-invalid={formErrors.fromAddress}
             />
+
+            {formErrors.fromAddress && <EmptyFieldMsg />}
           </Field>
 
           <FieldGroup className="grid grid-cols-2 sm:grid-cols-3 justify-between gap-6 mt-8">
             <Field className="relative">
-              <FieldLabel htmlFor="city" className="text-label font-normal">
+              <FieldLabel
+                htmlFor="city"
+                className={cn(
+                  "text-label font-normal",
+                  formErrors.fromCity ? "label-error" : "",
+                )}
+              >
                 City
               </FieldLabel>
 
@@ -174,11 +245,20 @@ function AddInvoice({ onShowAddInvoice }: { onShowAddInvoice: () => void }) {
                 value={invoiceFormData.fromCity}
                 name="fromCity"
                 onChange={handleChange}
+                aria-invalid={formErrors.fromCity}
               />
+
+              {formErrors.fromAddress && <EmptyFieldMsg />}
             </Field>
 
             <Field className="relative">
-              <FieldLabel htmlFor="postcode" className="text-label font-normal">
+              <FieldLabel
+                htmlFor="postcode"
+                className={cn(
+                  "text-label font-normal",
+                  formErrors.fromPostCode ? "label-error" : "",
+                )}
+              >
                 Post Code
               </FieldLabel>
 
@@ -188,11 +268,18 @@ function AddInvoice({ onShowAddInvoice }: { onShowAddInvoice: () => void }) {
                 name="fromPostCode"
                 maxLength={6}
                 onChange={handleChange}
+                aria-invalid={formErrors.fromPostCode}
               />
             </Field>
 
             <Field className="relative col-span-2 sm:col-span-1">
-              <FieldLabel htmlFor="country" className="text-label font-normal">
+              <FieldLabel
+                htmlFor="country"
+                className={cn(
+                  "text-label font-normal",
+                  formErrors.fromCountry ? "label-error" : "",
+                )}
+              >
                 Country
               </FieldLabel>
 
@@ -201,14 +288,23 @@ function AddInvoice({ onShowAddInvoice }: { onShowAddInvoice: () => void }) {
                 value={invoiceFormData.fromCountry}
                 name="fromCountry"
                 onChange={handleChange}
+                aria-invalid={formErrors.fromCountry}
               />
+
+              {formErrors.fromCountry && <EmptyFieldMsg />}
             </Field>
           </FieldGroup>
 
           <h3 className="capitalize text-secondary font-bold mt-10">bill to</h3>
 
           <Field className="relative mt-4">
-            <FieldLabel htmlFor="cname" className="text-label font-normal">
+            <FieldLabel
+              htmlFor="cname"
+              className={cn(
+                "text-label font-normal",
+                formErrors.clientName ? "label-error" : "",
+              )}
+            >
               Client's Name
             </FieldLabel>
 
@@ -217,11 +313,20 @@ function AddInvoice({ onShowAddInvoice }: { onShowAddInvoice: () => void }) {
               value={invoiceFormData.clientName}
               name="clientName"
               onChange={handleChange}
+              aria-invalid={formErrors.clientName}
             />
+
+            {formErrors.clientName && <EmptyFieldMsg />}
           </Field>
 
           <Field className="relative mt-4">
-            <FieldLabel htmlFor="cemail" className="text-label font-normal">
+            <FieldLabel
+              htmlFor="cemail"
+              className={cn(
+                "text-label font-normal",
+                formErrors.clientEmail ? "label-error" : "",
+              )}
+            >
               Client's Email
             </FieldLabel>
 
@@ -230,11 +335,20 @@ function AddInvoice({ onShowAddInvoice }: { onShowAddInvoice: () => void }) {
               value={invoiceFormData.clientEmail}
               name="clientEmail"
               onChange={handleChange}
+              aria-invalid={formErrors.clientEmail}
             />
+
+            {formErrors.clientEmail && <EmptyFieldMsg />}
           </Field>
 
           <Field className="relative mt-4">
-            <FieldLabel htmlFor="caddress" className="text-label font-normal">
+            <FieldLabel
+              htmlFor="caddress"
+              className={cn(
+                "text-label font-normal",
+                formErrors.clientAddress ? "label-error" : "",
+              )}
+            >
               Street Address
             </FieldLabel>
 
@@ -243,12 +357,21 @@ function AddInvoice({ onShowAddInvoice }: { onShowAddInvoice: () => void }) {
               value={invoiceFormData.clientAddress}
               name="clientAddress"
               onChange={handleChange}
+              aria-invalid={formErrors.clientAddress}
             />
+
+            {formErrors.clientAddress && <EmptyFieldMsg />}
           </Field>
 
           <FieldGroup className="grid grid-cols-2 sm:grid-cols-3 justify-between gap-6">
             <Field className="relative mt-4">
-              <FieldLabel htmlFor="ccity" className="text-label font-normal">
+              <FieldLabel
+                htmlFor="ccity"
+                className={cn(
+                  "text-label font-normal",
+                  formErrors.clientCity ? "label-error" : "",
+                )}
+              >
                 City
               </FieldLabel>
 
@@ -257,13 +380,19 @@ function AddInvoice({ onShowAddInvoice }: { onShowAddInvoice: () => void }) {
                 value={invoiceFormData.clientCity}
                 name="clientCity"
                 onChange={handleChange}
+                aria-invalid={formErrors.clientCity}
               />
+
+              {formErrors.clientCity && <EmptyFieldMsg />}
             </Field>
 
             <Field className="relative mt-4">
               <FieldLabel
                 htmlFor="cpostcode"
-                className="text-label font-normal"
+                className={cn(
+                  "text-label font-normal",
+                  formErrors.clientPostCode ? "label-error" : "",
+                )}
               >
                 Post Code
               </FieldLabel>
@@ -274,11 +403,18 @@ function AddInvoice({ onShowAddInvoice }: { onShowAddInvoice: () => void }) {
                 name="clientPostCode"
                 maxLength={6}
                 onChange={handleChange}
+                aria-invalid={formErrors.clientPostCode}
               />
             </Field>
 
             <Field className="relative mt-4">
-              <FieldLabel htmlFor="ccountry" className="text-label font-normal">
+              <FieldLabel
+                htmlFor="ccountry"
+                className={cn(
+                  "text-label font-normal",
+                  formErrors.clientCountry ? "label-error" : "",
+                )}
+              >
                 Country
               </FieldLabel>
 
@@ -287,26 +423,37 @@ function AddInvoice({ onShowAddInvoice }: { onShowAddInvoice: () => void }) {
                 value={invoiceFormData.clientCountry}
                 name="clientCountry"
                 onChange={handleChange}
+                aria-invalid={formErrors.clientCountry}
               />
+
+              {formErrors.clientCountry && <EmptyFieldMsg />}
             </Field>
           </FieldGroup>
 
           <FieldGroup className="md:flex-row mt-10">
             <Field className="mt-4">
-              <FieldLabel htmlFor="city" className="text-label font-normal">
+              <FieldLabel
+                htmlFor="dueDate"
+                className={cn(
+                  "text-label font-normal",
+                  formErrors.invoiceDueDate ? "label-error" : "",
+                )}
+              >
                 Invoice Date
               </FieldLabel>
 
               <Input
                 type="date"
+                id="dueDate"
                 value={invoiceFormData.invoiceDueDate}
                 name="invoiceDueDate"
                 onChange={handleChange}
+                aria-invalid={formErrors.invoiceDueDate}
               />
             </Field>
 
             <Field className="mt-4">
-              <FieldLabel htmlFor="" className="text-label font-normal">
+              <FieldLabel className="text-label font-normal">
                 Payment Terms
               </FieldLabel>
 
@@ -346,7 +493,10 @@ function AddInvoice({ onShowAddInvoice }: { onShowAddInvoice: () => void }) {
           <Field className="relative mt-7">
             <FieldLabel
               htmlFor="description"
-              className="text-label font-normal"
+              className={cn(
+                "text-label font-normal",
+                formErrors.projectDescription ? "label-error" : "",
+              )}
             >
               Project Description
             </FieldLabel>
@@ -356,21 +506,22 @@ function AddInvoice({ onShowAddInvoice }: { onShowAddInvoice: () => void }) {
               value={invoiceFormData.projectDescription}
               name="projectDescription"
               onChange={handleChange}
+              aria-invalid={formErrors.projectDescription}
             />
+
+            {formErrors.clientCity && <EmptyFieldMsg />}
           </Field>
 
-          <h3 className="mt-10 mb-4 text-blue-gray text-lg font-bold">
-            Item List
-          </h3>
+          <h3 className="mt-10 mb-4 text-label text-lg font-bold">Item List</h3>
 
           <div>
             <table>
               <thead>
                 <tr className="grid grid-cols-5 w-full">
-                  <th className="text-left table-heading">Item Name</th>
-                  <th className="table-heading">Qty.</th>
-                  <th className="table-heading">Price</th>
-                  <th className="table-heading">Total</th>
+                  <th className="text-left text-label text-sm">Item Name</th>
+                  <th className="text-label text-sm">Qty.</th>
+                  <th className="text-label text-sm">Price</th>
+                  <th className="text-label text-sm">Total</th>
                 </tr>
               </thead>
 
