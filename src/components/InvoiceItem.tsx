@@ -1,7 +1,7 @@
 import { ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { invoiceFormProps, invoiceItemProps } from "@/types";
-import { capitalizeFirstLetter, formatDueDate } from "@/utils";
+import { capitalizeFirstLetter, formatDueDate, checkStatus } from "@/utils";
 
 export default function InvoiceItem({ invoices, darkMode }: invoiceItemProps) {
   function calculateInvoicePrice(invoice: invoiceFormProps) {
@@ -10,29 +10,6 @@ export default function InvoiceItem({ invoices, darkMode }: invoiceItemProps) {
       .reduce((acc, currentValue) => acc + currentValue, 0);
 
     return invoicePrice;
-  }
-
-  function checkStatus(status: string) {
-    let statusbg = "";
-
-    switch (status) {
-      case "paid":
-        statusbg = `${darkMode ? "bg-emerald-50/5" : "bg-emerald-50"} before:bg-emerald-400 text-emerald-400`;
-        break;
-
-      case "pending":
-        statusbg = `${darkMode ? "bg-pizazz/5" : "bg-pizazz/12"} before:bg-pizazz text-pizazz`;
-        break;
-
-      case "draft":
-        statusbg = `${darkMode ? "bg-tranquil/50 before:bg-ana text-ana" : "bg-tranquil/12 before:bg-tranquil text-tranquil"}`;
-        break;
-
-      default:
-        statusbg = "";
-    }
-
-    return statusbg;
   }
 
   return (
@@ -63,7 +40,7 @@ export default function InvoiceItem({ invoices, darkMode }: invoiceItemProps) {
             <p
               className={cn(
                 "px-11 py-3 rounded-md col-start-2 sm:order-4 relative top-4 sm:top-0 font-bold before:content-[''] before:absolute before:top-4.75 before:bottom-0 before:left-7 before:w-2 before:h-2 before:rounded-full",
-                checkStatus(invoice.status),
+                checkStatus(invoice.status, darkMode),
               )}
             >
               {capitalizeFirstLetter(invoice.status)}

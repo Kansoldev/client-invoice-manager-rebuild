@@ -50,3 +50,26 @@ export function formatDueDate(invoiceDate: string) {
 
   return `${DAY} ${MONTH} ${YEAR}`;
 }
+
+export function checkStatus(status: string, darkMode?: boolean) {
+  let statusbg = "";
+
+  switch (status) {
+    case "paid":
+      statusbg = `${darkMode ? "bg-emerald-50/5" : "bg-emerald-50"} before:bg-emerald-400 text-emerald-400`;
+      break;
+
+    case "pending":
+      statusbg = `${darkMode ? "bg-pizazz/5" : "bg-pizazz/12"} before:bg-pizazz text-pizazz`;
+      break;
+
+    case "draft":
+      statusbg = `${darkMode ? "bg-tranquil/50 before:bg-ana text-ana" : "bg-tranquil/12 before:bg-tranquil text-tranquil"}`;
+      break;
+
+    default:
+      statusbg = "";
+  }
+
+  return statusbg;
+}
