@@ -1,22 +1,7 @@
 import { ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { capitalizeFirstLetter } from "@/utils";
 import type { invoiceFormProps, invoiceItemProps } from "@/types";
-
-const MONTHS = [
-  "Jan",
-  "Feb",
-  "Mar",
-  "Apr",
-  "May",
-  "Jun",
-  "Jul",
-  "Aug",
-  "Sep",
-  "Oct",
-  "Nov",
-  "Dec",
-];
+import { capitalizeFirstLetter, formatDueDate } from "@/utils";
 
 export default function InvoiceItem({ invoices, darkMode }: invoiceItemProps) {
   function calculateInvoicePrice(invoice: invoiceFormProps) {
@@ -25,15 +10,6 @@ export default function InvoiceItem({ invoices, darkMode }: invoiceItemProps) {
       .reduce((acc, currentValue) => acc + currentValue, 0);
 
     return invoicePrice;
-  }
-
-  function formatDueDate(invoiceDate: string) {
-    const customDate = new Date(invoiceDate);
-    const MONTH = MONTHS[customDate.getMonth()];
-    const DAY = customDate.getDate();
-    const YEAR = customDate.getFullYear();
-
-    return `${DAY} ${MONTH} ${YEAR}`;
   }
 
   function checkStatus(status: string) {

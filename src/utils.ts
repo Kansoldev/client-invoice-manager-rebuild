@@ -26,3 +26,27 @@ export function generateRandomString() {
 
   return combined.join("");
 }
+
+export function formatDueDate(invoiceDate: string) {
+  const MONTHS = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+
+  const customDate = new Date(invoiceDate);
+  const MONTH = MONTHS[customDate.getMonth()];
+  const DAY = customDate.getDate();
+  const YEAR = customDate.getFullYear();
+
+  return `${DAY} ${MONTH} ${YEAR}`;
+}
