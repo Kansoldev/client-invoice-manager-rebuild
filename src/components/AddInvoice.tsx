@@ -1,7 +1,7 @@
 import { useState, type ChangeEvent, type SubmitEvent } from "react";
+import { useOutletContext } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { ChevronLeft, Plus, Trash } from "lucide-react";
-import { v4 as uuidv4 } from "uuid";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import {
@@ -12,24 +12,20 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import type { invoiceFormProps, invoiceItemsProps } from "@/types";
-import { Button } from "@/components/ui/button";
+import type {
+  invoiceFormProps,
+  invoiceItemsProps,
+  OutletContext,
+} from "@/types";
 import { generateRandomString } from "@/utils";
-
-const REQUIRED_FIELDS = [
-  "fromAddress",
-  "fromCity",
-  "fromPostCode",
-  "fromCountry",
-  "clientName",
-  "clientEmail",
-  "clientAddress",
-  "clientCity",
-  "clientPostCode",
-  "clientCountry",
-  "projectDescription",
-  "invoiceDueDate",
-] as const;
+import {
+  handleAddInvoiceItem,
+  handleEditInvoiceItem,
+  handleRemoveInvoiceItem,
+  handleValidation,
+} from "@/invoiceForm";
+import { Button } from "@/components/ui/button";
+import EmptyFieldMsg from "./EmptyFieldMsg";
 
 function AddInvoice({
   onAddInvoice,
@@ -57,20 +53,7 @@ function AddInvoice({
     invoiceItems: [],
   });
 
-  const [formErrors, setFormErrors] = useState({
-    fromAddress: false,
-    fromCity: false,
-    fromPostCode: false,
-    fromCountry: false,
-    clientName: false,
-    clientEmail: false,
-    clientAddress: false,
-    clientCity: false,
-    clientPostCode: false,
-    clientCountry: false,
-    invoiceDueDate: false,
-    projectDescription: false,
-  });
+  const { formErrors, setFormErrors } = useOutletContext<OutletContext>();
 
   function handleChange(e: ChangeEvent<HTMLInputElement>) {
     setInvoiceFormData((prevInvoiceData) => ({
@@ -79,79 +62,14 @@ function AddInvoice({
     }));
   }
 
-  function handleAddItem() {
-    const newItem = {
-      id: uuidv4(),
-      itemName: "",
-      itemPrice: "",
-      itemQuantity: "",
-      total: 0,
-    };
+  function handleSubmit(e: SubmitEvent<HTMLFormElement>) {
+    e.preventDefault();
 
-    setInvoiceFormData((prevInvoiceData) => ({
-      ...prevInvoiceData,
-      invoiceItems: [...prevInvoiceData.invoiceItems, newItem],
-    }));
-  }
-
-  function handleUpdateInvoiceItem(
-    e: ChangeEvent<HTMLInputElement>,
-    id: string,
-  ) {
-    setInvoiceFormData((prevInvoiceData) => {
-      return {
-        ...prevInvoiceData,
-        invoiceItems: prevInvoiceData.invoiceItems.map((invoiceItem) => {
-          if (invoiceItem.id === id) {
-            const updatedItem = {
-              ...invoiceItem,
-              [e.target.name]: e.target.value,
-            };
-
-            return {
-              ...updatedItem,
-              total:
-                Number(updatedItem.itemQuantity) *
-                Number(updatedItem.itemPrice),
-            };
-          }
-
-          return invoiceItem;
-        }),
-      };
-    });
-  }
-
-  function handleRemoveInvoiceItem(itemID: string) {
-    setInvoiceFormData((prevInvoiceData) => {
-      return {
-        ...prevInvoiceData,
-        invoiceItems: prevInvoiceData.invoiceItems.filter(
-          (invoiceItem) => invoiceItem.id !== itemID,
-        ),
-      };
-    });
-  }
-
-  function handleValidation() {
-    let isValid = false;
-
-    const newErrors = Object.fromEntries(
-      REQUIRED_FIELDS.map((field) => [field, invoiceFormData[field] === ""]),
-    );
-
-    if (!Object.values(newErrors).includes(true)) {
-      isValid = true;
-    }
+    const { newErrors, isValid } = handleValidation(invoiceFormData);
 
     setFormErrors((prevFormErrors) => ({ ...prevFormErrors, ...newErrors }));
 
-    return isValid;
-  }
-
-  function handleSubmit(e: SubmitEvent<HTMLFormElement>) {
-    e.preventDefault();
-    if (!handleValidation()) return;
+    if (!isValid) return;
 
     onAddInvoice(invoiceFormData);
 
@@ -173,14 +91,6 @@ function AddInvoice({
       status: "pending",
       invoiceItems: [],
     });
-  }
-
-  function EmptyFieldMsg() {
-    return (
-      <span className="absolute right-0 left-0 text-right text-xs top-[1.3px] text-red-aura font-semibold">
-        can't be empty
-      </span>
-    );
   }
 
   return (
@@ -539,7 +449,11 @@ function AddInvoice({
                             <Input
                               name="itemName"
                               onChange={(e) =>
-                                handleUpdateInvoiceItem(e, invoiceItem.id)
+                                handleEditInvoiceItem(
+                                  e,
+                                  invoiceItem.id,
+                                  setInvoiceFormData,
+                                )
                               }
                             />
                           </td>
@@ -548,7 +462,11 @@ function AddInvoice({
                             <Input
                               name="itemQuantity"
                               onChange={(e) =>
-                                handleUpdateInvoiceItem(e, invoiceItem.id)
+                                handleEditInvoiceItem(
+                                  e,
+                                  invoiceItem.id,
+                                  setInvoiceFormData,
+                                )
                               }
                             />
                           </td>
@@ -558,7 +476,11 @@ function AddInvoice({
                               type="text"
                               name="itemPrice"
                               onChange={(e) =>
-                                handleUpdateInvoiceItem(e, invoiceItem.id)
+                                handleEditInvoiceItem(
+                                  e,
+                                  invoiceItem.id,
+                                  setInvoiceFormData,
+                                )
                               }
                             />
                           </td>
@@ -576,7 +498,10 @@ function AddInvoice({
                               className="ml-2 mt-4 fill-lavender text-lavender hover:fill-red-aura hover:text-red-aura cursor-pointer"
                               size={20}
                               onClick={() =>
-                                handleRemoveInvoiceItem(invoiceItem.id)
+                                handleRemoveInvoiceItem(
+                                  invoiceItem.id,
+                                  setInvoiceFormData,
+                                )
                               }
                             />
                           </td>
@@ -591,7 +516,7 @@ function AddInvoice({
               type="button"
               size="lg"
               className="bg-strong-white text-glaucous dark:bg-comet dark:text-white w-full mt-10"
-              onClick={handleAddItem}
+              onClick={() => handleAddInvoiceItem(setInvoiceFormData)}
             >
               <Plus className="relative top-[-1.3px]" /> Add New Item
             </Button>
@@ -602,6 +527,7 @@ function AddInvoice({
               type="button"
               size="lg"
               className="bg-strong-white pb-5 font-bold text-glaucous"
+              onClick={onShowAddInvoice}
             >
               Discard
             </Button>
