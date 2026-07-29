@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { invoiceFormProps, invoiceItemProps } from "@/types";
@@ -46,10 +47,12 @@ export default function InvoiceItem({ invoices, darkMode }: invoiceItemProps) {
               {capitalizeFirstLetter(invoice.status)}
             </p>
 
-            <ChevronRight
-              size={18}
-              className="text-secondary hidden sm:block order-4 cursor-pointer"
-            />
+            <Link to={`/invoice/id/${invoice.invoiceId}`} className="order-4">
+              <ChevronRight
+                size={18}
+                className="text-secondary hidden sm:block cursor-pointer"
+              />
+            </Link>
           </div>
         );
       })}

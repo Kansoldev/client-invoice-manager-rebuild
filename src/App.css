@@ -13,6 +13,7 @@
   --color-form: #fff;
   --color-label: var(--glaucous);
 
+  --color-black-pepper: var(--black-pepper);
   --color-tranquil: var(--tranquil);
   --color-glaucous: var(--glaucous);
   --color-lavender: var(--lavender);
@@ -20,6 +21,10 @@
   --color-outer-space: var(--outer-space);
   --color-ana: var(--ana);
   --color-red-aura: var(--red-aura);
+  --color-strong-white: var(--strong-white);
+  --color-authentic-white: var(--authentic-white);
+  --color-pastel-indigo: var(--pastel-indigo);
+  --color-comet: var(--comet);
 }
 
 :root {
@@ -34,6 +39,10 @@
   --outer-space: #1e2139;
   --ana: #dfe3fa;
   --red-aura: #ec5757;
+  --strong-white: #f9fafe;
+  --authentic-white: #f8f8fb;
+  --pastel-indigo: #858bb2;
+  --comet: #252945;
 }
 
 @theme inline {
@@ -95,7 +104,7 @@
   }
 
   body {
-    background-color: var(--body-bg);
+    background-color: var(--authentic-white);
     font-family: "League Spartan", sans-serif;
     font-optical-sizing: auto;
     font-style: normal;
