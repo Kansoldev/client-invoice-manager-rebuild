@@ -1,12 +1,14 @@
-import { Fragment } from "react";
+import { useState, Fragment } from "react";
 import { Link, useParams, useOutletContext } from "react-router-dom";
 import { ChevronLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import type { OutletContext, invoiceFormProps } from "@/types";
 import { capitalizeFirstLetter, checkStatus, formatDueDate } from "@/utils";
+import EditInvoice from "./EditInvoice";
 
 const ViewInvoice = () => {
+  const [showEditInvoice, setShowEditInvoice] = useState(false);
   const { darkMode, invoices } = useOutletContext<OutletContext>();
   const params = useParams();
   const filteredInvoice = invoices.filter(
@@ -55,6 +57,7 @@ const ViewInvoice = () => {
                 <Button
                   size="lg"
                   className="text-[15px] bg-strong-white dark:bg-comet text-secondary dark:text-white"
+                  onClick={() => setShowEditInvoice(!showEditInvoice)}
                 >
                   Edit
                 </Button>
@@ -207,15 +210,7 @@ const ViewInvoice = () => {
                         </span>
                       </td>
 
-                      <td>
-                        <span className="font-bold text-primary"></span>
-                      </td>
-
-                      <td>
-                        <span className="font-bold text-primary"></span>
-                      </td>
-
-                      <td className="flex items-center justify-center">
+                      <td className="flex items-center justify-center col-start-5">
                         <span className="font-bold text-white text-2xl">
                           £
                           {TotalItemPrices.reduce(
@@ -232,6 +227,13 @@ const ViewInvoice = () => {
           </Fragment>
         ))}
       </section>
+
+      {showEditInvoice && (
+        <EditInvoice
+          singleInvoice={filteredInvoice}
+          onShowEditInvoice={() => setShowEditInvoice(!showEditInvoice)}
+        />
+      )}
     </>
   );
 };
