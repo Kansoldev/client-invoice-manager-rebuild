@@ -29,10 +29,8 @@ import EmptyFieldMsg from "./EmptyFieldMsg";
 
 function AddInvoice({
   onAddInvoice,
-  onShowAddInvoice,
 }: {
   onAddInvoice: (val: invoiceFormProps) => void;
-  onShowAddInvoice: () => void;
 }) {
   const [invoiceFormData, setInvoiceFormData] = useState<invoiceFormProps>({
     invoiceId: generateRandomString(),
@@ -53,7 +51,8 @@ function AddInvoice({
     invoiceItems: [],
   });
 
-  const { formErrors, setFormErrors } = useOutletContext<OutletContext>();
+  const { formErrors, setFormErrors, showAddInvoice, setShowAddInvoice } =
+    useOutletContext<OutletContext>();
 
   function handleChange(e: ChangeEvent<HTMLInputElement>) {
     setInvoiceFormData((prevInvoiceData) => ({
@@ -96,7 +95,7 @@ function AddInvoice({
   return (
     <div
       className="bg-black/50 fixed top-0 right-0 bottom-0 left-0 overflow-y-scroll"
-      onClick={onShowAddInvoice}
+      onClick={() => setShowAddInvoice(!showAddInvoice)}
     >
       <div
         className="bg-form md:w-1/2 px-2 md:rounded-tr-[20px] md:rounded-br-[20px] lg:pl-40 lg:pr-18 md:pt-30 lg:pt-10"
@@ -104,7 +103,7 @@ function AddInvoice({
       >
         <Button
           className="bg-transparent mt-24 mb-4 md:hidden text-primary"
-          onClick={onShowAddInvoice}
+          onClick={() => setShowAddInvoice(!showAddInvoice)}
         >
           <ChevronLeft size={18} className="text-secondary cursor-pointer" /> Go
           back
@@ -527,7 +526,7 @@ function AddInvoice({
               type="button"
               size="lg"
               className="bg-strong-white pb-5 font-bold text-glaucous"
-              onClick={onShowAddInvoice}
+              onClick={() => setShowAddInvoice(!showAddInvoice)}
             >
               Discard
             </Button>

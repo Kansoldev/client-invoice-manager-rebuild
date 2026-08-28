@@ -36,12 +36,7 @@ function App() {
 
       {invoices.length > 0 && <InvoiceItem />}
 
-      {showAddInvoice && (
-        <AddInvoice
-          onAddInvoice={handleAddInvoice}
-          onShowAddInvoice={() => setShowAddInvoice(!showAddInvoice)}
-        />
-      )}
+      {showAddInvoice && <AddInvoice onAddInvoice={handleAddInvoice} />}
     </>
   );
 }
