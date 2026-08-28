@@ -9,7 +9,7 @@ import EditInvoice from "./EditInvoice";
 
 const ViewInvoice = () => {
   const [showEditInvoice, setShowEditInvoice] = useState(false);
-  const { darkMode, invoices } = useOutletContext<OutletContext>();
+  const { darkMode, invoices, setInvoices } = useOutletContext<OutletContext>();
   const params = useParams();
   const filteredInvoice = invoices.filter(
     (invoice: invoiceFormProps) => invoice.invoiceId === params.id,
@@ -21,6 +21,21 @@ const ViewInvoice = () => {
       TotalItemPrices.push(item.total);
     });
   });
+
+  function handleMarkAsPaid(id: string) {
+    setInvoices(
+      invoices.map((invoice) => {
+        if (invoice.invoiceId === id) {
+          return {
+            ...invoice,
+            status: "paid",
+          };
+        }
+
+        return invoice;
+      }),
+    );
+  }
 
   return (
     <>
@@ -66,7 +81,12 @@ const ViewInvoice = () => {
                   Delete
                 </Button>
 
-                <Button variant="secondary" size="lg" className="text-[15px]">
+                <Button
+                  variant="secondary"
+                  size="lg"
+                  className="text-[15px]"
+                  onClick={() => handleMarkAsPaid(invoice.invoiceId)}
+                >
                   Mark as Paid
                 </Button>
               </div>
