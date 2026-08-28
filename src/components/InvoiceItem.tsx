@@ -1,10 +1,12 @@
-import { Link } from "react-router-dom";
+import { Link, useOutletContext } from "react-router-dom";
 import { ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
-import type { invoiceFormProps, invoiceItemProps } from "@/types";
+import type { invoiceFormProps, OutletContext } from "@/types";
 import { capitalizeFirstLetter, formatDueDate, checkStatus } from "@/utils";
 
-export default function InvoiceItem({ invoices, darkMode }: invoiceItemProps) {
+export default function InvoiceItem() {
+  const { invoices, darkMode } = useOutletContext<OutletContext>();
+
   function calculateInvoicePrice(invoice: invoiceFormProps) {
     const invoicePrice = invoice.invoiceItems
       .map((item) => item.total)

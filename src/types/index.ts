@@ -27,11 +27,6 @@ export type invoiceFormProps = {
   invoiceItems: invoiceItemsProps[];
 };
 
-export type invoiceItemProps = {
-  invoices: invoiceFormProps[];
-  darkMode: boolean;
-};
-
 export type formErrorsProps = {
   fromAddress: boolean;
   fromCity: boolean;

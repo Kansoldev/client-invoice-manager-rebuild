@@ -6,7 +6,7 @@ import AddInvoice from "@/components/AddInvoice";
 import "./App.css";
 
 function App() {
-  const { showAddInvoice, setShowAddInvoice, invoices, setInvoices, darkMode } =
+  const { showAddInvoice, setShowAddInvoice, invoices, setInvoices } =
     useOutletContext<OutletContext>();
 
   function handleAddInvoice(data: invoiceFormProps) {
@@ -34,9 +34,7 @@ function App() {
         </section>
       )}
 
-      {invoices.length > 0 && (
-        <InvoiceItem invoices={invoices} darkMode={darkMode} />
-      )}
+      {invoices.length > 0 && <InvoiceItem />}
 
       {showAddInvoice && (
         <AddInvoice
