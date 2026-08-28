@@ -13,8 +13,7 @@ function Layout() {
   });
   const [invoices, setInvoices] = useState<invoiceFormProps[]>(() => {
     const invoices = window.localStorage.getItem("invoices");
-    if (invoices) return JSON.parse(invoices);
-    return [];
+    return invoices ? JSON.parse(invoices) : [];
   });
   const [formErrors, setFormErrors] = useState<formErrorsProps>({
     fromAddress: false,
