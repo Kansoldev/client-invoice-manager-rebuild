@@ -6,12 +6,8 @@ import AddInvoice from "@/components/AddInvoice";
 import "./App.css";
 
 function App() {
-  const { showAddInvoice, setShowAddInvoice, invoices, setInvoices } =
+  const { showAddInvoice, setShowAddInvoice, invoices } =
     useOutletContext<OutletContext>();
-
-  function handleAddInvoice(data: invoiceFormProps) {
-    setInvoices((prevInvoices) => [...prevInvoices, data]);
-  }
 
   return (
     <>
@@ -36,7 +32,7 @@ function App() {
 
       {invoices.length > 0 && <InvoiceItem />}
 
-      {showAddInvoice && <AddInvoice onAddInvoice={handleAddInvoice} />}
+      {showAddInvoice && <AddInvoice />}
     </>
   );
 }

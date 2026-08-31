@@ -29,7 +29,9 @@ export default function InvoiceItem() {
             </p>
 
             <p className="text-lavender font-medium row-start-2 col-end-1 sm:order-2 mt-5 sm:mt-0">
-              Due {formatDueDate(invoice.invoiceDueDate)}
+              {invoice.invoiceDueDate
+                ? `Due ${formatDueDate(invoice.invoiceDueDate)}`
+                : "No Date"}
             </p>
 
             <p className="text-primary font-bold row-start-3 col-end-1 sm:order-3">

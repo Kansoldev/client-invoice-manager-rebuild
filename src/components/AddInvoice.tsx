@@ -27,11 +27,7 @@ import {
 import { Button } from "@/components/ui/button";
 import EmptyFieldMsg from "./EmptyFieldMsg";
 
-function AddInvoice({
-  onAddInvoice,
-}: {
-  onAddInvoice: (val: invoiceFormProps) => void;
-}) {
+function AddInvoice() {
   const [invoiceFormData, setInvoiceFormData] = useState<invoiceFormProps>({
     invoiceId: generateRandomString(),
     fromAddress: "",
@@ -51,8 +47,13 @@ function AddInvoice({
     invoiceItems: [],
   });
 
-  const { formErrors, setFormErrors, showAddInvoice, setShowAddInvoice } =
-    useOutletContext<OutletContext>();
+  const {
+    formErrors,
+    setFormErrors,
+    showAddInvoice,
+    setShowAddInvoice,
+    setInvoices,
+  } = useOutletContext<OutletContext>();
 
   function handleChange(e: ChangeEvent<HTMLInputElement>) {
     setInvoiceFormData((prevInvoiceData) => ({
@@ -61,17 +62,12 @@ function AddInvoice({
     }));
   }
 
-  function handleSubmit(e: SubmitEvent<HTMLFormElement>) {
-    e.preventDefault();
+  function handleAddInvoice(status: string = "pending") {
+    if (status === "draft") {
+      invoiceFormData.status = "draft";
+    }
 
-    const { newErrors, isValid } = handleValidation(invoiceFormData);
-
-    setFormErrors((prevFormErrors) => ({ ...prevFormErrors, ...newErrors }));
-
-    if (!isValid) return;
-
-    onAddInvoice(invoiceFormData);
-
+    setInvoices((prevInvoices) => [...prevInvoices, invoiceFormData]);
     setInvoiceFormData({
       invoiceId: generateRandomString(),
       fromAddress: "",
@@ -87,9 +83,19 @@ function AddInvoice({
       invoiceDueDate: "",
       paymentTerms: "",
       projectDescription: "",
-      status: "pending",
+      status: status,
       invoiceItems: [],
     });
+  }
+
+  function handleSubmit(e: SubmitEvent<HTMLFormElement>) {
+    e.preventDefault();
+
+    const { newErrors, isValid } = handleValidation(invoiceFormData);
+    setFormErrors((prevFormErrors) => ({ ...prevFormErrors, ...newErrors }));
+    if (!isValid) return;
+
+    handleAddInvoice();
   }
 
   return (
@@ -536,6 +542,7 @@ function AddInvoice({
                 type="button"
                 size="lg"
                 className="pb-5 bg-tranquil text-lavender dark:text-ana font-bold"
+                onClick={() => handleAddInvoice("draft")}
               >
                 Save as Draft
               </Button>
