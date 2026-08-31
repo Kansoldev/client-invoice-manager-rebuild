@@ -60,6 +60,8 @@ export type OutletContext = {
     invoiceDueDate: boolean;
     projectDescription: boolean;
   };
+  statusFilter: string;
+  setStatusFilter: Dispatch<SetStateAction<string>>;
   setFormErrors: Dispatch<SetStateAction<formErrorsProps>>;
   setInvoices: Dispatch<SetStateAction<invoiceFormProps[]>>;
   setShowAddInvoice: (val: boolean) => void;

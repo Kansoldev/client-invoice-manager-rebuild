@@ -15,6 +15,7 @@ function Layout() {
     const invoices = window.localStorage.getItem("invoices");
     return invoices ? JSON.parse(invoices) : [];
   });
+  const [statusFilter, setStatusFilter] = useState("all");
   const [formErrors, setFormErrors] = useState<formErrorsProps>({
     fromAddress: false,
     fromCity: false,
@@ -59,6 +60,8 @@ function Layout() {
           darkMode,
           formErrors,
           setFormErrors,
+          statusFilter,
+          setStatusFilter,
         }}
       />
     </>

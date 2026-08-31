@@ -5,7 +5,13 @@ import type { invoiceFormProps, OutletContext } from "@/types";
 import { capitalizeFirstLetter, formatDueDate, checkStatus } from "@/utils";
 
 export default function InvoiceItem() {
-  const { invoices, darkMode } = useOutletContext<OutletContext>();
+  const { invoices, darkMode, statusFilter } =
+    useOutletContext<OutletContext>();
+
+  const filteredInvoices =
+    statusFilter === "all"
+      ? invoices
+      : invoices.filter((invoice) => invoice.status === statusFilter);
 
   function calculateInvoicePrice(invoice: invoiceFormProps) {
     const invoicePrice = invoice.invoiceItems
@@ -17,7 +23,7 @@ export default function InvoiceItem() {
 
   return (
     <section className="mx-4 lg:mx-0">
-      {invoices.map((invoice, index: number) => {
+      {filteredInvoices.map((invoice, index: number) => {
         return (
           <div
             key={index}

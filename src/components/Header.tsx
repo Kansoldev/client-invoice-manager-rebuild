@@ -18,7 +18,8 @@ const Header = ({
   onToggleAddInvoiceModal: () => void;
 }) => {
   const isPhone = useMediaQuery("(max-width: 640px)");
-  const { invoices } = useOutletContext<OutletContext>();
+  const { invoices, statusFilter, setStatusFilter } =
+    useOutletContext<OutletContext>();
 
   return (
     <header className="text-center mt-20 w-full lg:w-200 mx-auto px-4 py-6 lg:p-0 flex items-center justify-between">
@@ -33,7 +34,7 @@ const Header = ({
       </div>
 
       <div className="flex items-center lg:gap-15">
-        <Select>
+        <Select value={statusFilter} onValueChange={setStatusFilter}>
           <SelectTrigger className="lg:w-45 border-0 font-bold data-placeholder:text-primary">
             <SelectValue
               placeholder={isPhone ? "Filter" : "Filter by status"}
@@ -42,6 +43,10 @@ const Header = ({
 
           <SelectContent className="bg-white">
             <SelectGroup className="border-0 font-bold space-y-2 p-5 hover:bg-transparent">
+              <SelectItem value="all" className="cursor-pointer">
+                All
+              </SelectItem>
+
               <SelectItem value="draft" className="cursor-pointer">
                 Draft
               </SelectItem>
