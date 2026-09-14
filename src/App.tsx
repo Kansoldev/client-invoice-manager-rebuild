@@ -1,5 +1,5 @@
 import { useOutletContext } from "react-router-dom";
-import type { invoiceFormProps, OutletContext } from "./types";
+import type { OutletContext } from "./types";
 import Header from "@/components/Header";
 import InvoiceItem from "@/components/InvoiceItem";
 import AddInvoice from "@/components/AddInvoice";
