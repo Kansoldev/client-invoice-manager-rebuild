@@ -6,9 +6,11 @@ import { Button } from "@/components/ui/button";
 import type { OutletContext, invoiceFormProps } from "@/types";
 import { capitalizeFirstLetter, checkStatus, formatDueDate } from "@/utils";
 import EditInvoice from "./EditInvoice";
+import DeleteInvoice from "./DeleteInvoice";
 
 const ViewInvoice = () => {
   const [showEditInvoice, setShowEditInvoice] = useState(false);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const { darkMode, invoices, setInvoices } = useOutletContext<OutletContext>();
   const params = useParams();
   const filteredInvoice = invoices.filter(
@@ -77,7 +79,12 @@ const ViewInvoice = () => {
                   Edit
                 </Button>
 
-                <Button variant="danger" size="lg" className="text-[15px]">
+                <Button
+                  variant="danger"
+                  size="lg"
+                  className="text-[15px]"
+                  onClick={() => setShowDeleteDialog(!showDeleteDialog)}
+                >
                   Delete
                 </Button>
 
@@ -252,6 +259,13 @@ const ViewInvoice = () => {
         <EditInvoice
           singleInvoice={filteredInvoice}
           onShowEditInvoice={() => setShowEditInvoice(!showEditInvoice)}
+        />
+      )}
+
+      {showDeleteDialog && (
+        <DeleteInvoice
+          invoiceId={filteredInvoice[0].invoiceId}
+          onDeleteInvoice={() => setShowDeleteDialog(!showDeleteDialog)}
         />
       )}
     </>
